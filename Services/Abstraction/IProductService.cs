@@ -2,5 +2,5 @@
 
 public interface IProductService
 {
-    
+    Task SaveAllProductsToFileAsync();
 }

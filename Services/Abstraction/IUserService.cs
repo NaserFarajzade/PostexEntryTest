@@ -4,5 +4,5 @@ namespace Services.Abstraction;
 
 public interface IUserService
 {
-    Task<List<User>> GetAllUsersAsync();
+    Task SaveAllUsersToFileAsync();
 }

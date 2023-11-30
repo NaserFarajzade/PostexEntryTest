@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Models.OnlineShop;
 using Services.Abstraction;
 
 namespace WebAPI.Controllers;
@@ -17,10 +16,9 @@ public class UserController : ControllerBase
         _logger = logger;
     }
 
-    [HttpGet(Name = "GetUsers")]
-    public async Task<IActionResult> Get()
+    [HttpGet(Name = "SaveUsers")]
+    public async Task Save()
     {
-        var result = await _userService.GetAllUsersAsync();
-        return Ok(result);
+        await _userService.SaveAllUsersToFileAsync();
     }
 }

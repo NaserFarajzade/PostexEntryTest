@@ -1,41 +1,27 @@
-﻿using Models.OnlineShop;
-using RestSharp;
-using Services.Abstraction;
+﻿using Services.Abstraction;
+using Services.Abstraction.Infrastructure;
 
 namespace Services.Implementation;
 
 public class UserService: IUserService
 {
-    public async Task<List<User>> GetAllUsersAsync()
-    {
-        var restClient = new RestClient();
-        await CallApiAndSaveResult(restClient, "http://localhost:3001/api/users", "a.json");
-        return new List<User>();
-    }
-    static async Task CallApiAndSaveResult(RestClient restClient, string apiUrl, string fileName)
-    {
-        var stopwatch = System.Diagnostics.Stopwatch.StartNew();
-        try
-        {
-            var request = new RestRequest(apiUrl, Method.Get);
-            var response = await restClient.ExecuteAsync(request);
+    private readonly IConfigurationFactory _configurationFactory;
+    private readonly IApiCaller _apiCaller;
+    private readonly IFileWriter _fileWriter;
 
-            if (response.IsSuccessful)
-            {
-                var content = response.Content;
-                File.WriteAllText(fileName, content);
-            }
-            else
-            {
-            }
-        }
-        catch (Exception ex)
+    public UserService(IConfigurationFactory configurationFactory, IApiCaller apiCaller, IFileWriter fileWriter)
+    {
+        _configurationFactory = configurationFactory;
+        _apiCaller = apiCaller;
+        _fileWriter = fileWriter;
+    }
+    public async Task SaveAllUsersToFileAsync()
+    {
+        var url = _configurationFactory.GetUrl(nameof(UserService));
+        var response = await _apiCaller.ExecuteAndGetResponseAsync(url);
+        if (response is not null)
         {
-            Console.WriteLine(ex);
-        }
-        finally
-        {
-            stopwatch.Stop();
+            await _fileWriter.WriteToFileAsync("Files/users.txt", response, true);
         }
     }
 }
