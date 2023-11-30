@@ -1,3 +1,7 @@
 ﻿/.idea/
 /WebAPI/obj
 /WebAPI/bin
+/Models/obj
+/Models/bin
+/Services/obj
+/Services/bin
