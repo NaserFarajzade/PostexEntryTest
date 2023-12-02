@@ -1,4 +1,6 @@
-﻿using Services.Abstraction.Infrastructure;
+﻿using System.Text.Encodings.Web;
+using System.Text.Json;
+using Services.Abstraction.Infrastructure;
 
 namespace Services.Implementation.Infrastructure
 {
@@ -23,6 +25,16 @@ namespace Services.Implementation.Infrastructure
             await using var fileStream = new FileStream(filePath, fileMode, FileAccess.Write, FileShare.Read);
             await using var writer = new StreamWriter(fileStream);
             await writer.WriteAsync(content + "\n");
+        }
+        
+        public async Task WriteToFileAsync(string filePath, object content, bool append)
+        {
+            var serializedContent = JsonSerializer.Serialize(content, new JsonSerializerOptions
+            {
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                WriteIndented = true
+            });
+            await WriteToFileAsync(filePath, serializedContent, append);
         }
     }
 }

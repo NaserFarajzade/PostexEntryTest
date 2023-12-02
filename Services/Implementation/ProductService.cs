@@ -18,10 +18,10 @@ public class ProductService: IProductService
     public async Task SaveAllProductsToFileAsync()
     {
         var url = _configurationFactory.GetUrl(nameof(ProductService));
-        var response = await _apiCaller.ExecuteAndGetResponseAsync(url);
-        if (response is not null)
+        var result = await _apiCaller.ExecuteAndGetResultAsync(url);
+        if (result is not null)
         {
-            await _fileWriter.WriteToFileAsync("Files/products.txt", response, true);
+            await _fileWriter.WriteToFileAsync("Files/products.txt", result.Response, true);
         }
     }
 }

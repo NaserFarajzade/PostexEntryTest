@@ -19,10 +19,10 @@ public class OrderService: IOrderService
     public async Task SaveAllOrdersToFileAsync()
     {
         var url = _configurationFactory.GetUrl(nameof(OrderService));
-        var response = await _apiCaller.ExecuteAndGetResponseAsync(url);
-        if (response is not null)
+        var result = await _apiCaller.ExecuteAndGetResultAsync(url);
+        if (result is not null)
         {
-            await _fileWriter.WriteToFileAsync("Files/orders.txt", response, true);
+            await _fileWriter.WriteToFileAsync("Files/orders.txt", result.Response, true);
         }
     }
 }
