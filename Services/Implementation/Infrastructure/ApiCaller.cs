@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using RestSharp;
 using Services.Abstraction.Infrastructure;
+using Services.Record;
 
 namespace Services.Implementation.Infrastructure;
 
@@ -15,7 +16,7 @@ public class ApiCaller: IApiCaller
         _logger = logger;
     }
     
-    public async Task<string?> ExecuteAndGetResponseAsync(string apiUrl)
+    public async Task<ApiResponse?> ExecuteAndGetResultAsync(string apiUrl)
     {
         var stopWatch = Stopwatch.StartNew();
         try
@@ -26,7 +27,7 @@ public class ApiCaller: IApiCaller
             _logger.LogInformation($@"Api Calling duration: {duration} Milli Seconds with successful result");
             if (response.IsSuccessful)
             {
-                return response.IsSuccessful ? response.Content : null;
+                return new ApiResponse(apiUrl, response.Content, null);
             }
         }
         catch (Exception ex)
@@ -34,6 +35,7 @@ public class ApiCaller: IApiCaller
             var duration = stopWatch.ElapsedMilliseconds;
             _logger.LogInformation($@"Api Calling duration: {duration} Milli Seconds with Exception result");
             _logger.LogException(ex);
+            return new ApiResponse(apiUrl, null, ex.Message);
         }
         finally
         {

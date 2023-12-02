@@ -18,10 +18,10 @@ public class UserService: IUserService
     public async Task SaveAllUsersToFileAsync()
     {
         var url = _configurationFactory.GetUrl(nameof(UserService));
-        var response = await _apiCaller.ExecuteAndGetResponseAsync(url);
-        if (response is not null)
+        var result = await _apiCaller.ExecuteAndGetResultAsync(url);
+        if (result is not null)
         {
-            await _fileWriter.WriteToFileAsync("Files/users.txt", response, true);
+            await _fileWriter.WriteToFileAsync("Files/users.txt", result.Response, true);
         }
     }
 }
