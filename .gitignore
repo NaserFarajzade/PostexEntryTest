@@ -5,3 +5,5 @@
 /Models/bin
 /Services/obj
 /Services/bin
+/WebAPI/Files
+/WebAPI/logs

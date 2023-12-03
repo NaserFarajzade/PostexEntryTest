@@ -24,7 +24,7 @@ public class ApiCaller: IApiCaller
             var request = new RestRequest(apiUrl, Method.Get);
             var response = await _restClient.ExecuteAsync(request);
             var duration = stopWatch.ElapsedMilliseconds;
-            _logger.LogInformation($@"Api Calling duration: {duration} Milli Seconds with successful result");
+            _logger.LogInformation($@"Api {apiUrl} Calling duration: {duration} Milli Seconds with successful result");
             if (response.IsSuccessful)
             {
                 return new ApiResponse(apiUrl, response.Content, null);
